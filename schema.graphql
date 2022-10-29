@@ -1,0 +1,65 @@
+type _Schema_
+  @fulltext(
+    name: "tokenSearch"
+    language: en
+    algorithm: rank
+    include: [{ entity: "User", fields: [{ name: "id" }] }]
+  )
+
+type User @entity {
+  id: ID!
+  followers: [Connection!] @derivedFrom(field: "user")
+  following: [Connection!] @derivedFrom(field: "follower")
+  channels: [UserChannel!] @derivedFrom(field: "user")
+  chats: [ChatMessage!]
+  broadcasts: [Message!]
+}
+
+type Channel @entity {
+  id: ID!
+  name: String!
+  description: String!
+  isGated: Boolean!
+  contract: String
+  chainId: Int
+  ercType: Int
+  minHolding: Int
+  isRestricted: Boolean!
+  admins: [String!]
+  banned: [String!]
+  owner: String!
+  members: [UserChannel!]! @derivedFrom(field: "channel")
+  chats: [ChatMessage!] @derivedFrom(field: "channel")
+}
+
+type ChatMessage @entity {
+  id: ID! # Set to ${userId}-${channelId}-${timestamp}
+  channel: Channel!
+  from: User!
+  content: String!
+  timestamp: String!
+  txHash: String!
+}
+
+type Message @entity {
+  id: ID!
+  from: User!
+  content: String!
+  timestamp: String!
+  txHash: String!
+}
+
+type Connection @entity {
+  id: ID!
+  user: User!
+  follower: User!
+  timestamp: String!
+  txHash: String!
+}
+
+type UserChannel @entity {
+  id: ID!
+  user: User!
+  channel: Channel!
+  timestamp: String!
+}

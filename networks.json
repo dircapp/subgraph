@@ -1,0 +1,10 @@
+{
+  "fuji": {
+    "Sendertoken": {
+      "address": "0x3E3c5fE663cD4337Fc53c226955659BC385D4F59"
+    },
+    "Receivertoken": {
+      "address": "0xF6AE34143B25769e4A21c9b40E2d63F080C50642"
+    }
+  }
+}
