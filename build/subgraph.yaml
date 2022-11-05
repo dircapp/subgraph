@@ -1,0 +1,88 @@
+specVersion: 0.0.4
+schema:
+  file: schema.graphql
+features:
+  - fullTextSearch
+  - ipfsOnEthereumContracts
+dataSources:
+  - kind: ethereum
+    name: FollowContract
+    network: fuji
+    source:
+      address: "0x95105f4D5B75c3a35015eFC15AbE3B0Cedadc196"
+      abi: FollowContract
+      startBlock: 15117670
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Connection
+      abis:
+        - name: FollowContract
+          file: FollowContract/abis/FollowContract.json
+      eventHandlers:
+        - event: Follow(indexed address,address,uint256)
+          handler: handleFollow
+        - event: UnFollow(indexed address,address,uint256)
+          handler: handleUnFollow
+      file: FollowContract/FollowContract.wasm
+  - kind: ethereum
+    name: ChannelContract
+    network: fuji
+    source:
+      address: "0xeba2cC04edFc430590Cc9685d2002b53d0755086"
+      abi: ChannelContract
+      startBlock: 15117677
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Channel
+        - UserChannel
+        - ChatMessage
+      abis:
+        - name: ChannelContract
+          file: ChannelContract/abis/ChannelContract.json
+      eventHandlers:
+        - event: CreateChannel(indexed
+            uint256,string,string,bool,address,uint256,uint256,uint256,bool,address[],address[],address)
+          handler: handleCreateChannel
+        - event: JoinChannel(uint256,address)
+          handler: handleJoinChannel
+        - event: LeaveChannel(uint256,address)
+          handler: handleLeaveChannel
+        - event: AddAdmin(uint256,address)
+          handler: handleAddAdmin
+        - event: RemoveAdmin(uint256,address)
+          handler: handleRemoveAdmin
+        - event: BanUser(uint256,address)
+          handler: handleBanUser
+        - event: UnBanUser(uint256,address)
+          handler: handleUnBanUser
+        - event: Chat(indexed address,uint256,string,uint256)
+          handler: handleChat
+      file: ChannelContract/ChannelContract.wasm
+  - kind: ethereum
+    name: BroadcastContract
+    network: fuji
+    source:
+      address: "0x84ba5d052bF614b66f896747F86c5CE3E99065D2"
+      abi: BroadcastContract
+      startBlock: 15117684
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Message
+      abis:
+        - name: BroadcastContract
+          file: BroadcastContract/abis/BroadcastContract.json
+      eventHandlers:
+        - event: Broadcast(indexed address,string,uint256)
+          handler: handleBroadcast
+      file: BroadcastContract/BroadcastContract.wasm
