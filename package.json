@@ -4,7 +4,7 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ QmNqV4dKnGuemsvoQQcHeydUVqkCj4C9BEiACQX9J93END",
+    "deploy": "graph deploy --product hosted-service dircapp/dirc-core",
     "create-local": "graph create --node http://localhost:8020/ QmNqV4dKnGuemsvoQQcHeydUVqkCj4C9BEiACQX9J93END",
     "remove-local": "graph remove --node http://localhost:8020/ QmNqV4dKnGuemsvoQQcHeydUVqkCj4C9BEiACQX9J93END",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 QmNqV4dKnGuemsvoQQcHeydUVqkCj4C9BEiACQX9J93END",

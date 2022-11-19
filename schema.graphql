@@ -1,9 +1,16 @@
 type _Schema_
   @fulltext(
-    name: "tokenSearch"
+    name: "userSearch"
     language: en
     algorithm: rank
     include: [{ entity: "User", fields: [{ name: "id" }] }]
+  )
+
+  @fulltext(
+    name: "channelSearch"
+    language: en
+    algorithm: rank
+    include: [{ entity: "Channel", fields: [{ name: "id" }, { name: "name" }] }]
   )
 
 type User @entity {
@@ -12,7 +19,8 @@ type User @entity {
   following: [Connection!] @derivedFrom(field: "follower")
   channels: [UserChannel!] @derivedFrom(field: "user")
   chats: [ChatMessage!] @derivedFrom(field: "from")
-  broadcasts: [Message!] @derivedFrom(field: "from")
+  broadcasts: [BroadcastMessage!] @derivedFrom(field: "from")
+  replies: [BroadcastReply!] @derivedFrom(field: "from")
 }
 
 type Channel @entity {
@@ -41,12 +49,13 @@ type ChatMessage @entity {
   txHash: String!
 }
 
-type Message @entity {
+type BroadcastMessage @entity {
   id: ID!
   from: User!
   content: String!
   timestamp: String!
   txHash: String!
+  replies: [BroadcastReply!] @derivedFrom(field: "origin")
 }
 
 type Connection @entity {
@@ -62,4 +71,13 @@ type UserChannel @entity {
   user: User!
   channel: Channel!
   timestamp: String!
+}
+
+type BroadcastReply @entity {
+  id: ID!
+  from: User!
+  origin: BroadcastMessage!
+  content: String!
+  timestamp: String!
+  txHash: String!
 }

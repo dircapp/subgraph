@@ -121,28 +121,24 @@ export class CreateChannel__Params {
     return this._event.parameters[5].value.toBigInt();
   }
 
-  get ercType(): BigInt {
+  get minHolding(): BigInt {
     return this._event.parameters[6].value.toBigInt();
   }
 
-  get minHolding(): BigInt {
-    return this._event.parameters[7].value.toBigInt();
-  }
-
   get chatRestricted(): boolean {
-    return this._event.parameters[8].value.toBoolean();
+    return this._event.parameters[7].value.toBoolean();
   }
 
   get admins(): Array<Address> {
-    return this._event.parameters[9].value.toAddressArray();
+    return this._event.parameters[8].value.toAddressArray();
   }
 
   get banned(): Array<Address> {
-    return this._event.parameters[10].value.toAddressArray();
+    return this._event.parameters[9].value.toAddressArray();
   }
 
   get owner(): Address {
-    return this._event.parameters[11].value.toAddress();
+    return this._event.parameters[10].value.toAddress();
   }
 }
 
@@ -242,9 +238,8 @@ export class ChannelContract__channelMapResult {
   value4: Address;
   value5: BigInt;
   value6: BigInt;
-  value7: BigInt;
-  value8: boolean;
-  value9: Address;
+  value7: boolean;
+  value8: Address;
 
   constructor(
     value0: boolean,
@@ -254,9 +249,8 @@ export class ChannelContract__channelMapResult {
     value4: Address,
     value5: BigInt,
     value6: BigInt,
-    value7: BigInt,
-    value8: boolean,
-    value9: Address
+    value7: boolean,
+    value8: Address
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -267,7 +261,6 @@ export class ChannelContract__channelMapResult {
     this.value6 = value6;
     this.value7 = value7;
     this.value8 = value8;
-    this.value9 = value9;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -279,9 +272,8 @@ export class ChannelContract__channelMapResult {
     map.set("value4", ethereum.Value.fromAddress(this.value4));
     map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
     map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
-    map.set("value7", ethereum.Value.fromUnsignedBigInt(this.value7));
-    map.set("value8", ethereum.Value.fromBoolean(this.value8));
-    map.set("value9", ethereum.Value.fromAddress(this.value9));
+    map.set("value7", ethereum.Value.fromBoolean(this.value7));
+    map.set("value8", ethereum.Value.fromAddress(this.value8));
     return map;
   }
 
@@ -309,20 +301,16 @@ export class ChannelContract__channelMapResult {
     return this.value5;
   }
 
-  getErcType(): BigInt {
+  getMinHolding(): BigInt {
     return this.value6;
   }
 
-  getMinHolding(): BigInt {
+  getIsRestricted(): boolean {
     return this.value7;
   }
 
-  getIsRestricted(): boolean {
-    return this.value8;
-  }
-
   getOwner(): Address {
-    return this.value9;
+    return this.value8;
   }
 }
 
@@ -351,28 +339,24 @@ export class ChannelContract__getChannelResultChannelStruct extends ethereum.Tup
     return this[5].toBigInt();
   }
 
-  get ercType(): BigInt {
+  get minHolding(): BigInt {
     return this[6].toBigInt();
   }
 
-  get minHolding(): BigInt {
-    return this[7].toBigInt();
-  }
-
   get isRestricted(): boolean {
-    return this[8].toBoolean();
+    return this[7].toBoolean();
   }
 
   get admins(): Array<Address> {
-    return this[9].toAddressArray();
+    return this[8].toAddressArray();
   }
 
   get banned(): Array<Address> {
-    return this[10].toAddressArray();
+    return this[9].toAddressArray();
   }
 
   get owner(): Address {
-    return this[11].toAddress();
+    return this[10].toAddress();
   }
 }
 
@@ -381,10 +365,33 @@ export class ChannelContract extends ethereum.SmartContract {
     return new ChannelContract("ChannelContract", address);
   }
 
+  approvedContracts(param0: Address): boolean {
+    let result = super.call(
+      "approvedContracts",
+      "approvedContracts(address):(bool)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_approvedContracts(param0: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "approvedContracts",
+      "approvedContracts(address):(bool)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   channelMap(param0: BigInt): ChannelContract__channelMapResult {
     let result = super.call(
       "channelMap",
-      "channelMap(uint256):(bool,string,string,bool,address,uint256,uint256,uint256,bool,address)",
+      "channelMap(uint256):(bool,string,string,bool,address,uint256,uint256,bool,address)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -396,9 +403,8 @@ export class ChannelContract extends ethereum.SmartContract {
       result[4].toAddress(),
       result[5].toBigInt(),
       result[6].toBigInt(),
-      result[7].toBigInt(),
-      result[8].toBoolean(),
-      result[9].toAddress()
+      result[7].toBoolean(),
+      result[8].toAddress()
     );
   }
 
@@ -407,7 +413,7 @@ export class ChannelContract extends ethereum.SmartContract {
   ): ethereum.CallResult<ChannelContract__channelMapResult> {
     let result = super.tryCall(
       "channelMap",
-      "channelMap(uint256):(bool,string,string,bool,address,uint256,uint256,uint256,bool,address)",
+      "channelMap(uint256):(bool,string,string,bool,address,uint256,uint256,bool,address)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -423,9 +429,8 @@ export class ChannelContract extends ethereum.SmartContract {
         value[4].toAddress(),
         value[5].toBigInt(),
         value[6].toBigInt(),
-        value[7].toBigInt(),
-        value[8].toBoolean(),
-        value[9].toAddress()
+        value[7].toBoolean(),
+        value[8].toAddress()
       )
     );
   }
@@ -435,7 +440,7 @@ export class ChannelContract extends ethereum.SmartContract {
   ): ChannelContract__getChannelResultChannelStruct {
     let result = super.call(
       "getChannel",
-      "getChannel(uint256):((bool,string,string,bool,address,uint256,uint256,uint256,bool,address[],address[],address))",
+      "getChannel(uint256):((bool,string,string,bool,address,uint256,uint256,bool,address[],address[],address))",
       [ethereum.Value.fromUnsignedBigInt(_channelId)]
     );
 
@@ -449,7 +454,7 @@ export class ChannelContract extends ethereum.SmartContract {
   ): ethereum.CallResult<ChannelContract__getChannelResultChannelStruct> {
     let result = super.tryCall(
       "getChannel",
-      "getChannel(uint256):((bool,string,string,bool,address,uint256,uint256,uint256,bool,address[],address[],address))",
+      "getChannel(uint256):((bool,string,string,bool,address,uint256,uint256,bool,address[],address[],address))",
       [ethereum.Value.fromUnsignedBigInt(_channelId)]
     );
     if (result.reverted) {
@@ -683,24 +688,20 @@ export class CreateChannelCall__Inputs {
     return this._call.inputValues[4].value.toBigInt();
   }
 
-  get _ercType(): BigInt {
+  get _minHolding(): BigInt {
     return this._call.inputValues[5].value.toBigInt();
   }
 
-  get _minHolding(): BigInt {
-    return this._call.inputValues[6].value.toBigInt();
-  }
-
   get _isRestricted(): boolean {
-    return this._call.inputValues[7].value.toBoolean();
+    return this._call.inputValues[6].value.toBoolean();
   }
 
   get _admins(): Array<Address> {
-    return this._call.inputValues[8].value.toAddressArray();
+    return this._call.inputValues[7].value.toAddressArray();
   }
 
   get _banned(): Array<Address> {
-    return this._call.inputValues[9].value.toAddressArray();
+    return this._call.inputValues[8].value.toAddressArray();
   }
 }
 
@@ -708,6 +709,40 @@ export class CreateChannelCall__Outputs {
   _call: CreateChannelCall;
 
   constructor(call: CreateChannelCall) {
+    this._call = call;
+  }
+}
+
+export class CrossChainGatedJoinCall extends ethereum.Call {
+  get inputs(): CrossChainGatedJoinCall__Inputs {
+    return new CrossChainGatedJoinCall__Inputs(this);
+  }
+
+  get outputs(): CrossChainGatedJoinCall__Outputs {
+    return new CrossChainGatedJoinCall__Outputs(this);
+  }
+}
+
+export class CrossChainGatedJoinCall__Inputs {
+  _call: CrossChainGatedJoinCall;
+
+  constructor(call: CrossChainGatedJoinCall) {
+    this._call = call;
+  }
+
+  get _channelId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get _user(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class CrossChainGatedJoinCall__Outputs {
+  _call: CrossChainGatedJoinCall;
+
+  constructor(call: CrossChainGatedJoinCall) {
     this._call = call;
   }
 }
@@ -832,6 +867,36 @@ export class RemoveAdminCall__Outputs {
   _call: RemoveAdminCall;
 
   constructor(call: RemoveAdminCall) {
+    this._call = call;
+  }
+}
+
+export class SetApprovedContractCall extends ethereum.Call {
+  get inputs(): SetApprovedContractCall__Inputs {
+    return new SetApprovedContractCall__Inputs(this);
+  }
+
+  get outputs(): SetApprovedContractCall__Outputs {
+    return new SetApprovedContractCall__Outputs(this);
+  }
+}
+
+export class SetApprovedContractCall__Inputs {
+  _call: SetApprovedContractCall;
+
+  constructor(call: SetApprovedContractCall) {
+    this._call = call;
+  }
+
+  get _contract(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetApprovedContractCall__Outputs {
+  _call: SetApprovedContractCall;
+
+  constructor(call: SetApprovedContractCall) {
     this._call = call;
   }
 }

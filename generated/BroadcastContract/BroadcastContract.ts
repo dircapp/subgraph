@@ -30,9 +30,31 @@ export class Broadcast__Params {
   get _message(): string {
     return this._event.parameters[1].value.toString();
   }
+}
 
-  get _timestamp(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+export class ReplyBroadcast extends ethereum.Event {
+  get params(): ReplyBroadcast__Params {
+    return new ReplyBroadcast__Params(this);
+  }
+}
+
+export class ReplyBroadcast__Params {
+  _event: ReplyBroadcast;
+
+  constructor(event: ReplyBroadcast) {
+    this._event = event;
+  }
+
+  get _user(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get _messageId(): string {
+    return this._event.parameters[1].value.toString();
+  }
+
+  get _message(): string {
+    return this._event.parameters[2].value.toString();
   }
 }
 
@@ -68,6 +90,40 @@ export class BroadcastCall__Outputs {
   _call: BroadcastCall;
 
   constructor(call: BroadcastCall) {
+    this._call = call;
+  }
+}
+
+export class ReplyCall extends ethereum.Call {
+  get inputs(): ReplyCall__Inputs {
+    return new ReplyCall__Inputs(this);
+  }
+
+  get outputs(): ReplyCall__Outputs {
+    return new ReplyCall__Outputs(this);
+  }
+}
+
+export class ReplyCall__Inputs {
+  _call: ReplyCall;
+
+  constructor(call: ReplyCall) {
+    this._call = call;
+  }
+
+  get _message(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+
+  get _messageId(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+}
+
+export class ReplyCall__Outputs {
+  _call: ReplyCall;
+
+  constructor(call: ReplyCall) {
     this._call = call;
   }
 }

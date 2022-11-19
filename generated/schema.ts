@@ -386,7 +386,7 @@ export class ChatMessage extends Entity {
   }
 }
 
-export class Message extends Entity {
+export class BroadcastMessage extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -394,18 +394,20 @@ export class Message extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save Message entity without an ID");
+    assert(id != null, "Cannot save BroadcastMessage entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        `Entities of type Message must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        `Entities of type BroadcastMessage must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("Message", id.toString(), this);
+      store.set("BroadcastMessage", id.toString(), this);
     }
   }
 
-  static load(id: string): Message | null {
-    return changetype<Message | null>(store.get("Message", id));
+  static load(id: string): BroadcastMessage | null {
+    return changetype<BroadcastMessage | null>(
+      store.get("BroadcastMessage", id)
+    );
   }
 
   get id(): string {
@@ -451,6 +453,23 @@ export class Message extends Entity {
 
   set txHash(value: string) {
     this.set("txHash", Value.fromString(value));
+  }
+
+  get replies(): Array<string> | null {
+    let value = this.get("replies");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set replies(value: Array<string> | null) {
+    if (!value) {
+      this.unset("replies");
+    } else {
+      this.set("replies", Value.fromStringArray(<Array<string>>value));
+    }
   }
 }
 
@@ -578,5 +597,82 @@ export class UserChannel extends Entity {
 
   set timestamp(value: string) {
     this.set("timestamp", Value.fromString(value));
+  }
+}
+
+export class BroadcastReply extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save BroadcastReply entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type BroadcastReply must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("BroadcastReply", id.toString(), this);
+    }
+  }
+
+  static load(id: string): BroadcastReply | null {
+    return changetype<BroadcastReply | null>(store.get("BroadcastReply", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): string {
+    let value = this.get("from");
+    return value!.toString();
+  }
+
+  set from(value: string) {
+    this.set("from", Value.fromString(value));
+  }
+
+  get origin(): string {
+    let value = this.get("origin");
+    return value!.toString();
+  }
+
+  set origin(value: string) {
+    this.set("origin", Value.fromString(value));
+  }
+
+  get content(): string {
+    let value = this.get("content");
+    return value!.toString();
+  }
+
+  set content(value: string) {
+    this.set("content", Value.fromString(value));
+  }
+
+  get timestamp(): string {
+    let value = this.get("timestamp");
+    return value!.toString();
+  }
+
+  set timestamp(value: string) {
+    this.set("timestamp", Value.fromString(value));
+  }
+
+  get txHash(): string {
+    let value = this.get("txHash");
+    return value!.toString();
+  }
+
+  set txHash(value: string) {
+    this.set("txHash", Value.fromString(value));
   }
 }

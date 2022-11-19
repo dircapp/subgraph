@@ -24,7 +24,6 @@ export function handleCreateChannel(event: CreateChannel): void {
   channel.isGated = event.params.isGated;
   channel.contract = event.params._contract.toHexString();
   channel.chainId = event.params.chainId.toI32();
-  channel.ercType = event.params.ercType.toI32();
   channel.minHolding = event.params.minHolding.toI32();
   channel.isRestricted = event.params.chatRestricted;
   channel.admins = [];

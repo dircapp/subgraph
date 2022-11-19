@@ -32,9 +32,9 @@ dataSources:
     name: ChannelContract
     network: fuji
     source:
-      address: "0xeba2cC04edFc430590Cc9685d2002b53d0755086"
+      address: "0x6898214015dE7B7e6469CdD907224E81e560E5E9"
       abi: ChannelContract
-      startBlock: 15117677
+      startBlock: 15955649
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -48,7 +48,7 @@ dataSources:
           file: ChannelContract/abis/ChannelContract.json
       eventHandlers:
         - event: CreateChannel(indexed
-            uint256,string,string,bool,address,uint256,uint256,uint256,bool,address[],address[],address)
+            uint256,string,string,bool,address,uint256,uint256,bool,address[],address[],address)
           handler: handleCreateChannel
         - event: JoinChannel(uint256,address)
           handler: handleJoinChannel
@@ -69,20 +69,23 @@ dataSources:
     name: BroadcastContract
     network: fuji
     source:
-      address: "0x84ba5d052bF614b66f896747F86c5CE3E99065D2"
+      address: "0x82A2b468268583F8F7fd8b3DA3907371C5Db61F7"
       abi: BroadcastContract
-      startBlock: 15117684
+      startBlock: 15955649
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - User
-        - Message
+        - BroadcastMessage
+        - BroadcastReply
       abis:
         - name: BroadcastContract
           file: BroadcastContract/abis/BroadcastContract.json
       eventHandlers:
-        - event: Broadcast(indexed address,string,uint256)
+        - event: Broadcast(indexed address,string)
           handler: handleBroadcast
+        - event: ReplyBroadcast(indexed address,string,string)
+          handler: handleReplyBroadcast
       file: BroadcastContract/BroadcastContract.wasm
