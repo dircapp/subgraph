@@ -47,6 +47,17 @@ type ChatMessage @entity {
   content: String!
   timestamp: String!
   txHash: String!
+  replies: [ChatReply!] @derivedFrom(field: "origin")
+}
+
+type ChatReply @entity {
+  id: ID!
+  channel: Channel!
+  from: User!
+  origin: ChatMessage!
+  content: String!
+  timestamp: String!
+  txHash: String!
 }
 
 type BroadcastMessage @entity {

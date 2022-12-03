@@ -7,11 +7,11 @@ features:
 dataSources:
   - kind: ethereum
     name: FollowContract
-    network: fuji
+    network: arbitrum-goerli
     source:
-      address: "0x95105f4D5B75c3a35015eFC15AbE3B0Cedadc196"
+      address: "0xF525cf5967b8c88C24c14d47C15E15A2390582DD"
       abi: FollowContract
-      startBlock: 15117670
+      startBlock: 2188572
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -30,11 +30,11 @@ dataSources:
       file: ./src/followContract.ts
   - kind: ethereum
     name: ChannelContract
-    network: fuji
+    network: arbitrum-goerli
     source:
-      address: "0x6898214015dE7B7e6469CdD907224E81e560E5E9"
+      address: "0x65B880ee224aEB9e52DdbA928fFe7557D8c2a1DF"
       abi: ChannelContract
-      startBlock: 15955649
+      startBlock: 2188572
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -61,16 +61,18 @@ dataSources:
           handler: handleBanUser
         - event: UnBanUser(uint256,address)
           handler: handleUnBanUser
-        - event: Chat(indexed address,uint256,string,uint256)
+        - event: Chat(indexed address,uint256,string)
           handler: handleChat
+        - event: ReplyChat(indexed address,uint256,string,string)
+          handler: handleReplyChat
       file: ./src/channelContract.ts
   - kind: ethereum
     name: BroadcastContract
-    network: fuji
+    network: arbitrum-goerli
     source:
-      address: "0x82A2b468268583F8F7fd8b3DA3907371C5Db61F7"
+      address: "0xC0b55332dC38eF506F047D6ec93ba91BdF7D05CA"
       abi: BroadcastContract
-      startBlock: 15955649
+      startBlock: 2188572
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

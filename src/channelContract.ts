@@ -6,10 +6,11 @@ import {
   RemoveAdmin,
   BanUser,
   UnBanUser,
-  Chat
+  Chat,
+  ReplyChat
 } from "../generated/ChannelContract/ChannelContract"
 
-import { Channel, UserChannel, ChatMessage} from "../generated/schema"
+import { User, Channel, UserChannel, ChatMessage, ChatReply} from "../generated/schema"
 import { store } from '@graphprotocol/graph-ts'
 // import { BigInt } from "@graphprotocol/graph-ts";
 
@@ -147,6 +148,12 @@ export function handleChat(event: Chat): void {
   let channel = Channel.load(channelId);
   if(!channel) return;
 
+  let user = User.load(userId);
+  if (!user) {
+    user = new User(userId);
+    user.save();
+  }
+
   let chatMessage = new ChatMessage(`${userId}-${channelId}-${timestamp}`)
   chatMessage.channel = channelId;
   chatMessage.from = userId;
@@ -155,4 +162,27 @@ export function handleChat(event: Chat): void {
   chatMessage.txHash = event.transaction.hash.toHexString();
 
   chatMessage.save();
+}
+
+export function handleReplyChat(event: ReplyChat): void {
+  const userId = event.params._user.toHexString()
+  const chatMessageId = event.params._messageId
+
+  let chatMessage = ChatMessage.load(chatMessageId);
+  if(!chatMessage) return;
+  let user = User.load(userId);
+  if (!user) {
+    user = new User(userId);
+    user.save();
+  }
+
+  const reply = new ChatReply(`${userId}-${chatMessageId}-${event.block.timestamp.toString()}`)
+  reply.channel = event.params._channelId.toString();
+  reply.from = userId;
+  reply.content = event.params._message;
+  reply.origin = chatMessageId;
+  reply.timestamp = event.block.timestamp.toString();
+  reply.txHash = event.transaction.hash.toHexString()
+
+  reply.save();
 }

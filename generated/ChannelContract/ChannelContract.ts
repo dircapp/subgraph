@@ -78,10 +78,6 @@ export class Chat__Params {
   get _message(): string {
     return this._event.parameters[2].value.toString();
   }
-
-  get _timestamp(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
 }
 
 export class CreateChannel extends ethereum.Event {
@@ -205,6 +201,36 @@ export class RemoveAdmin__Params {
 
   get user(): Address {
     return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class ReplyChat extends ethereum.Event {
+  get params(): ReplyChat__Params {
+    return new ReplyChat__Params(this);
+  }
+}
+
+export class ReplyChat__Params {
+  _event: ReplyChat;
+
+  constructor(event: ReplyChat) {
+    this._event = event;
+  }
+
+  get _user(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get _channelId(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get _message(): string {
+    return this._event.parameters[2].value.toString();
+  }
+
+  get _messageId(): string {
+    return this._event.parameters[3].value.toString();
   }
 }
 
@@ -867,6 +893,44 @@ export class RemoveAdminCall__Outputs {
   _call: RemoveAdminCall;
 
   constructor(call: RemoveAdminCall) {
+    this._call = call;
+  }
+}
+
+export class ReplyChatCall extends ethereum.Call {
+  get inputs(): ReplyChatCall__Inputs {
+    return new ReplyChatCall__Inputs(this);
+  }
+
+  get outputs(): ReplyChatCall__Outputs {
+    return new ReplyChatCall__Outputs(this);
+  }
+}
+
+export class ReplyChatCall__Inputs {
+  _call: ReplyChatCall;
+
+  constructor(call: ReplyChatCall) {
+    this._call = call;
+  }
+
+  get _channelId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get _message(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+
+  get _messageId(): string {
+    return this._call.inputValues[2].value.toString();
+  }
+}
+
+export class ReplyChatCall__Outputs {
+  _call: ReplyChatCall;
+
+  constructor(call: ReplyChatCall) {
     this._call = call;
   }
 }
