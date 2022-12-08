@@ -151,6 +151,7 @@ export function handleChat(event: Chat): void {
   let user = User.load(userId);
   if (!user) {
     user = new User(userId);
+    user.name = userId;
     user.save();
   }
 
@@ -173,6 +174,7 @@ export function handleReplyChat(event: ReplyChat): void {
   let user = User.load(userId);
   if (!user) {
     user = new User(userId);
+    user.name = userId;
     user.save();
   }
 

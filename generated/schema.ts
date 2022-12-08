@@ -42,6 +42,15 @@ export class User extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get name(): string {
+    let value = this.get("name");
+    return value!.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
   get followers(): Array<string> | null {
     let value = this.get("followers");
     if (!value || value.kind == ValueKind.NULL) {
@@ -402,8 +411,8 @@ export class ChatMessage extends Entity {
     this.set("txHash", Value.fromString(value));
   }
 
-  get eplies(): Array<string> | null {
-    let value = this.get("eplies");
+  get replies(): Array<string> | null {
+    let value = this.get("replies");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -411,11 +420,11 @@ export class ChatMessage extends Entity {
     }
   }
 
-  set eplies(value: Array<string> | null) {
+  set replies(value: Array<string> | null) {
     if (!value) {
-      this.unset("eplies");
+      this.unset("replies");
     } else {
-      this.set("eplies", Value.fromStringArray(<Array<string>>value));
+      this.set("replies", Value.fromStringArray(<Array<string>>value));
     }
   }
 }

@@ -15,6 +15,7 @@ type _Schema_
 
 type User @entity {
   id: ID!
+  name: String!
   followers: [Connection!] @derivedFrom(field: "user")
   following: [Connection!] @derivedFrom(field: "follower")
   channels: [UserChannel!] @derivedFrom(field: "user")

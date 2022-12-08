@@ -12,6 +12,7 @@ export function handleBroadcast(event: Broadcast): void {
   let user = User.load(userId);
   if (!user) {
     user = new User(userId);
+    user.name = userId;
     user.save();
   }
 
@@ -32,6 +33,7 @@ export function handleReplyBroadcast(event: ReplyBroadcast): void {
   let user = User.load(userId);
   if (!user) {
     user = new User(userId);
+    user.name = userId;
     user.save();
   }
 

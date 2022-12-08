@@ -15,12 +15,14 @@ export function handleFollow(event: Follow): void {
   let follower = User.load(followerId);
   if (!follower) {
     follower = new User(followerId);
+    follower.name = followerId;
     follower.save()
   }
 
   let user = User.load(userId);
   if (!user) {
     user = new User(userId);
+    user.name = userId;
     user.save()
   }
 
